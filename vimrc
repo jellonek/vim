@@ -75,6 +75,7 @@ vnoremap < <gv
 
 " no docstring window popup on completion
 autocmd FileType python setlocal completeopt-=preview
+autocmd FileType go setlocal nowrap
 
 " for jedi
 let g:jedi#use_tabs_not_buffers=0
@@ -101,4 +102,6 @@ fun! SetupVAM()
 endfun
 
 call SetupVAM()
-VAMActivate jedi-vim vim-flake8 ctrlp pylint vim-gitgutter commentary repeat surround unimpaired L9 AutoComplPop
+autocmd FileType python VAMActivate jedi-vim vim-flake8 pylint
+autocmd FileType go VAMActivate github:faith/vim-go
+VAMActivate ctrlp vim-gitgutter commentary repeat surround unimpaired L9 AutoComplPop ack github:majutsushi/tagbar github:tpope/vim-fugitive
