@@ -104,4 +104,7 @@ endfun
 call SetupVAM()
 autocmd FileType python VAMActivate jedi-vim vim-flake8 pylint
 autocmd FileType go VAMActivate github:fatih/vim-go
-VAMActivate ctrlp vim-gitgutter commentary repeat surround unimpaired L9 AutoComplPop ack github:majutsushi/tagbar github:tpope/vim-fugitive
+VAMActivate ctrlp vim-gitgutter commentary repeat surround unimpaired L9 AutoComplPop ack github:majutsushi/tagbar github:tpope/vim-fugitive github:scrooloose/nerdtree github:Xuyuanp/nerdtree-git-plugin
+
+autocmd vimenter * NERDTree
+autocmd vimenter * TagbarToggle
