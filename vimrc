@@ -1,4 +1,6 @@
-set nocompatible | filetype indent plugin on | syn on
+set nocompatible
+filetype indent plugin on
+syn on
 
 auto BufRead,BufNewFile *.mako set sts=2 ft=mako sw=2
 auto BufRead,BufNewFile *.jinja set sts=2 sw=2 ft=htmljinja
@@ -58,6 +60,8 @@ au FocusLost * :wa
 nnoremap <silent> <Leader>ev :e $MYVIMRC<CR>
 nnoremap <silent> <leader>sc :Scratch<CR>
 nnoremap <silent> <Leader>so :so $MYVIMRC<CR>
+nnoremap <silent> <Leader>bn :bn<CR>
+nnoremap <silent> <Leader>bp :bp<CR>
 inoremap jj <Esc>
 
 set nobackup
@@ -68,6 +72,9 @@ nnoremap <Leader>y "+y
 nnoremap <Leader>Y "+Y
 nnoremap <Leader>p "+p
 nnoremap <Leader>P "+P
+" with shift
+imap <S-insert> <c-r>*
+map <S-insert> "+p
 
 " better block indentin/deindenting
 vnoremap > >gv
@@ -101,11 +108,15 @@ fun! SetupVAM()
   call vam#ActivateAddons([], {'auto_install' : 0})
 endfun
 
+filetype off
 call SetupVAM()
 autocmd FileType python VAMActivate jedi-vim vim-flake8 pylint
 autocmd FileType go VAMActivate github:fatih/vim-go
-VAMActivate ctrlp vim-gitgutter commentary repeat surround unimpaired L9 AutoComplPop ack github:majutsushi/tagbar github:tpope/vim-fugitive github:scrooloose/nerdtree github:Xuyuanp/nerdtree-git-plugin
+autocmd FileType proto VAMActivate github:belltoy/vim-protobuf
+" VAMActivate ctrlp vim-gitgutter commentary repeat surround unimpaired L9 AutoComplPop ack github:majutsushi/tagbar github:tpope/vim-fugitive github:scrooloose/nerdtree github:Xuyuanp/nerdtree-git-plugin
+VAMActivate ctrlp vim-gitgutter commentary repeat surround unimpaired L9 github:roxma/SimpleAutoComplPop ack github:majutsushi/tagbar github:tpope/vim-fugitive github:scrooloose/nerdtree github:Xuyuanp/nerdtree-git-plugin github:sjl/splice.vim
 
-autocmd vimenter * TagbarToggle
-nmap <F8> :TagbarToggle<CR>
+filetype plugin indent on
+
 nmap <F7> :NERDTreeToggle<CR>
+nmap <F8> :TagbarToggle<CR>
