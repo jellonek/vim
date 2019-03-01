@@ -116,8 +116,8 @@ call SetupVAM()
 autocmd FileType python VAMActivate jedi-vim vim-flake8 pylint
 autocmd FileType go VAMActivate github:fatih/vim-go
 autocmd FileType proto VAMActivate github:belltoy/vim-protobuf
-" VAMActivate ctrlp vim-gitgutter commentary repeat surround unimpaired L9 AutoComplPop ack github:majutsushi/tagbar github:tpope/vim-fugitive github:scrooloose/nerdtree github:Xuyuanp/nerdtree-git-plugin
-VAMActivate ctrlp vim-gitgutter commentary repeat surround unimpaired L9 github:roxma/SimpleAutoComplPop ack github:majutsushi/tagbar github:tpope/vim-fugitive github:scrooloose/nerdtree github:Xuyuanp/nerdtree-git-plugin github:sjl/splice.vim
+" VAMActivate ctrlp vim-gitgutter commentary repeat surround unimpaired github:vim-scripts/L9 AutoComplPop ack github:majutsushi/tagbar github:tpope/vim-fugitive github:scrooloose/nerdtree github:Xuyuanp/nerdtree-git-plugin
+VAMActivate ctrlp vim-gitgutter commentary repeat surround unimpaired github:vim-scripts/L9 github:roxma/SimpleAutoComplPop ack github:majutsushi/tagbar github:tpope/vim-fugitive github:scrooloose/nerdtree github:Xuyuanp/nerdtree-git-plugin github:sjl/splice.vim
 
 filetype plugin indent on
 
