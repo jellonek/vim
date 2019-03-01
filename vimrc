@@ -84,6 +84,9 @@ vnoremap < <gv
 autocmd FileType python setlocal completeopt-=preview
 autocmd FileType go setlocal nowrap
 
+" auto remove eol whitespaces on buf write
+autocmd BufWritePre *.py,*.sh :%s/\s\+$//e
+
 " for jedi
 let g:jedi#use_tabs_not_buffers=0
 let g:jedi#popup_select_first=0
