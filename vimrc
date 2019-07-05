@@ -11,6 +11,8 @@ au FileType css set omnifunc=csscomplete#CompleteCSS
 au FileType less set omnifunc=csscomplete#CompleteCSS
 
 au FileType python set sts=4 sw=4 et
+au FileType json set sts=2 sw=2 et
+au FileType go set sts=8 sw=8 noet
 
 " virtualevn
 if has('python')
@@ -32,6 +34,7 @@ set wildmenu
 set wildignore+=*.pyc
 set wildignore+=*_build/*
 set wildignore+=*/coverage/*
+set autoread
 
 " tabs
 map <C-t> :tabnew<CR>
@@ -62,6 +65,8 @@ nnoremap <silent> <leader>sc :Scratch<CR>
 nnoremap <silent> <Leader>so :so $MYVIMRC<CR>
 nnoremap <silent> <Leader>bn :bn<CR>
 nnoremap <silent> <Leader>bp :bp<CR>
+nnoremap <silent> <Leader>z :bn<CR>
+nnoremap <silent> <Leader>x :bp<CR>
 inoremap jj <Esc>
 
 set nobackup
@@ -113,13 +118,20 @@ endfun
 
 filetype off
 call SetupVAM()
+
 autocmd FileType python VAMActivate jedi-vim vim-flake8 pylint
-autocmd FileType go VAMActivate github:fatih/vim-go
+" autocmd FileType go VAMActivate github:fatih/vim-go
+VAMActivate github:fatih/vim-go
 autocmd FileType proto VAMActivate github:belltoy/vim-protobuf
 " VAMActivate ctrlp vim-gitgutter commentary repeat surround unimpaired github:vim-scripts/L9 AutoComplPop ack github:majutsushi/tagbar github:tpope/vim-fugitive github:scrooloose/nerdtree github:Xuyuanp/nerdtree-git-plugin
-VAMActivate ctrlp vim-gitgutter commentary repeat surround unimpaired github:vim-scripts/L9 github:roxma/SimpleAutoComplPop ack github:majutsushi/tagbar github:tpope/vim-fugitive github:scrooloose/nerdtree github:Xuyuanp/nerdtree-git-plugin github:sjl/splice.vim
+VAMActivate ctrlp vim-gitgutter commentary repeat surround unimpaired github:vim-scripts/L9 github:roxma/SimpleAutoComplPop ack github:majutsushi/tagbar github:tpope/vim-fugitive github:scrooloose/nerdtree github:Xuyuanp/nerdtree-git-plugin github:sjl/splice.vim github:mileszs/ack.vim github:junegunn/limelight.vim github:vim-syntastic/syntastic github:Raimondi/delimitMate github:w0rp/ale github:sheerun/vim-polyglot
 
 filetype plugin indent on
 
 nmap <F7> :NERDTreeToggle<CR>
 nmap <F8> :TagbarToggle<CR>
+
+let g:ale_linters = {"go": ['golint', 'go vet'], "python": ["python -m flake8"], }
+
+nmap <Leader>l :Limelight!!<CR>
+xmap <Leader>l :Limelight!!<CR>
