@@ -71,6 +71,7 @@ inoremap jj <Esc>
 
 set nobackup
 set directory=~/.vim/.tmp,.
+set undodir=~/.vim/.tmp,.
 
 " system clipboard without shift
 nnoremap <Leader>y "+y
@@ -124,7 +125,7 @@ autocmd FileType python VAMActivate jedi-vim vim-flake8 pylint
 VAMActivate github:fatih/vim-go
 autocmd FileType proto VAMActivate github:belltoy/vim-protobuf
 " VAMActivate ctrlp vim-gitgutter commentary repeat surround unimpaired github:vim-scripts/L9 AutoComplPop ack github:majutsushi/tagbar github:tpope/vim-fugitive github:scrooloose/nerdtree github:Xuyuanp/nerdtree-git-plugin
-VAMActivate ctrlp vim-gitgutter commentary repeat surround unimpaired github:vim-scripts/L9 github:roxma/SimpleAutoComplPop ack github:majutsushi/tagbar github:tpope/vim-fugitive github:scrooloose/nerdtree github:Xuyuanp/nerdtree-git-plugin github:sjl/splice.vim github:mileszs/ack.vim github:junegunn/limelight.vim github:vim-syntastic/syntastic github:Raimondi/delimitMate github:w0rp/ale github:sheerun/vim-polyglot
+VAMActivate ctrlp vim-gitgutter commentary repeat surround unimpaired github:vim-scripts/L9 github:roxma/SimpleAutoComplPop ack github:majutsushi/tagbar github:tpope/vim-fugitive github:scrooloose/nerdtree github:Xuyuanp/nerdtree-git-plugin github:sjl/splice.vim github:mileszs/ack.vim github:junegunn/limelight.vim github:vim-syntastic/syntastic github:Raimondi/delimitMate github:w0rp/ale github:sheerun/vim-polyglot github:xolox/vim-notes
 
 filetype plugin indent on
 
@@ -135,3 +136,10 @@ let g:ale_linters = {"go": ['golint', 'go vet'], "python": ["python -m flake8"],
 
 nmap <Leader>l :Limelight!!<CR>
 xmap <Leader>l :Limelight!!<CR>
+
+highlight Comment cterm=italic
+let g:jsonnet_fmt_on_save = 1
+let g:jsonnet_fmt_options = '--string-style d'
+
+autocmd FileType jsonnet set sw=2 et
+autocmd FileType yaml set sw=2 et

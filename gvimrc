@@ -12,4 +12,4 @@ set listchars=tab:¿\ ,trail:·,extends:#,nbsp:·
 set pastetoggle=<F2>
 
 set lines=60
-set columns=120
+set columns=140
