@@ -36,10 +36,6 @@ set wildignore+=*_build/*
 set wildignore+=*/coverage/*
 set autoread
 
-" tabs
-map <C-t> :tabnew<CR>
-imap <C-t> <Esc>:tabnew<CR>i
-
 map <Leader>T :noautocmd vim TODO **/*py<CR>:cw<CR>
 imap <Leader>T <Esc>:noautocmd vim TODO **/*py<CR>:cw<CR>
 
@@ -88,6 +84,7 @@ vnoremap < <gv
 
 " no docstring window popup on completion
 autocmd FileType python setlocal completeopt-=preview
+
 autocmd FileType go setlocal nowrap
 
 " auto remove eol whitespaces on buf write
@@ -106,18 +103,23 @@ fun! SetupVAM()
   let c = get(g:, 'vim_addon_manager', {})
   let g:vim_addon_manager = c
   let c.plugin_root_dir = expand('$HOME', 1) . '/.vim/vim-addons'
+
+  " Force your ~/.vim/after directory to be last in &rtp always:
+  " let g:vim_addon_manager.rtp_list_hook = 'vam#ForceUsersAfterDirectoriesToBeLast'
+
   " most used options you may want to use:
   " let c.log_to_buf = 1
   " let c.auto_install = 0
   let &rtp.=(empty(&rtp)?'':',').c.plugin_root_dir.'/vim-addon-manager'
   if !isdirectory(c.plugin_root_dir.'/vim-addon-manager/autoload')
-    execute '!git clone --depth=1 git://github.com/MarcWeber/vim-addon-manager '
+    execute '!git clone --depth=1'
+        \       'https://github.com/MarcWeber/vim-addon-manager'
         \       shellescape(c.plugin_root_dir.'/vim-addon-manager', 1)
   endif
-  call vam#ActivateAddons([], {'auto_install' : 0})
-endfun
 
-filetype off
+  " This provides the VAMActivate command, you could be passing plugin names, too
+  call vam#ActivateAddons([], {})
+endfun
 call SetupVAM()
 
 autocmd FileType python VAMActivate jedi-vim vim-flake8 pylint
@@ -137,9 +139,9 @@ let g:ale_linters = {"go": ['golint', 'go vet'], "python": ["python -m flake8"],
 nmap <Leader>l :Limelight!!<CR>
 xmap <Leader>l :Limelight!!<CR>
 
-highlight Comment cterm=italic
 let g:jsonnet_fmt_on_save = 1
 let g:jsonnet_fmt_options = '--string-style d'
 
 autocmd FileType jsonnet set sw=2 et
 autocmd FileType yaml set sw=2 et
+colo wombat256
