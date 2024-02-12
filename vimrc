@@ -1,6 +1,66 @@
 set nocompatible
+
 filetype indent plugin on
 syn on
+
+call plug#begin()
+
+Plug 'kien/ctrlp.vim'
+Plug 'airblade/vim-gitgutter'
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-unimpaired'
+Plug 'vim-scripts/L9'
+Plug 'roxma/SimpleAutoComplPop'
+Plug 'majutsushi/tagbar'
+Plug 'tpope/vim-fugitive'
+Plug 'scrooloose/nerdtree'
+Plug 'Xuyuanp/nerdtree-git-plugin'
+Plug 'sjl/splice.vim'
+Plug 'mileszs/ack.vim'
+Plug 'junegunn/limelight.vim'
+Plug 'Raimondi/delimitMate'
+Plug 'sheerun/vim-polyglot'
+Plug 'xolox/vim-misc'
+Plug 'xolox/vim-notes'
+Plug 'mtth/scratch.vim'
+Plug 'prabirshrestha/asyncomplete.vim'
+Plug 'prabirshrestha/asyncomplete-lsp.vim'
+Plug 'prabirshrestha/vim-lsp'
+Plug 'mattn/vim-lsp-settings'
+
+Plug 'hrsh7th/vim-vsnip'
+Plug 'hrsh7th/vim-vsnip-integ'
+
+Plug 'rafamadriz/friendly-snippets'
+
+
+Plug 'rhysd/vim-healthcheck'
+
+call plug#end()
+
+function! s:on_lsp_buffer_enabled() abort
+  setlocal omnifunc=lsp#complete
+  setlocal signcolumn=yes
+  nmap <buffer> gi <plug>(lsp-definition)
+  nmap <buffer> gd <plug>(lsp-declaration)
+  nmap <buffer> gr <plug>(lsp-references)
+  nmap <buffer> gl <plug>(lsp-document-diagnostics)
+  nmap <buffer> [g <plug>(lsp-previous-diagnostic)
+  nmap <buffer> ]g <plug>(lsp-next-diagnostic)
+  nmap <buffer> <leader>rn <plug>(lsp-rename)
+  nmap <buffer> K <plug>(lsp-hover)
+
+  autocmd! BufWritePre *.rs,*.go call execute('LspDocumentFormatSync')
+endfunction
+
+augroup lsp_install
+  au!
+  " call s:on_lsp_buffer_enabled only for languages that has the server registered.
+  autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
+augroup END
+
 
 auto BufRead,BufNewFile *.mako set sts=2 ft=mako sw=2
 auto BufRead,BufNewFile *.jinja set sts=2 sw=2 ft=htmljinja
@@ -12,7 +72,7 @@ au FileType less set omnifunc=csscomplete#CompleteCSS
 
 au FileType python set sts=4 sw=4 et
 au FileType json set sts=2 sw=2 et
-au FileType go set sts=8 sw=8 noet
+" au FileType go set sts=8 sw=8 noet
 
 " virtualevn
 if has('python')
@@ -55,6 +115,7 @@ set tf " fast tty
 set ls=2 " last status - linia z nazwami plikow
 set cc=80 " color column
 " set list
+set rnu
 au FocusLost * :wa
 nnoremap <silent> <Leader>ev :e $MYVIMRC<CR>
 nnoremap <silent> <leader>sc :Scratch<CR>
@@ -70,8 +131,8 @@ set directory=~/.vim/.tmp,.
 set undodir=~/.vim/.tmp,.
 
 " system clipboard without shift
-nnoremap <Leader>y "+y
-nnoremap <Leader>Y "+Y
+vnoremap <Leader>y "+y
+vnoremap <Leader>Y "+Y
 nnoremap <Leader>p "+p
 nnoremap <Leader>P "+P
 " with shift
@@ -96,38 +157,26 @@ let g:jedi#popup_select_first=0
 
 set bg=dark
 
-" plugins
-set runtimepath+=~/.vim/vim-addon-manager
+" Expand
+imap <expr> <C-j>   vsnip#expandable()  ? '<Plug>(vsnip-expand)'         : '<C-j>'
+smap <expr> <C-j>   vsnip#expandable()  ? '<Plug>(vsnip-expand)'         : '<C-j>'
 
-fun! SetupVAM()
-  let c = get(g:, 'vim_addon_manager', {})
-  let g:vim_addon_manager = c
-  let c.plugin_root_dir = expand('$HOME', 1) . '/.vim/vim-addons'
+" Expand or jump
+imap <expr> <C-l>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
+smap <expr> <C-l>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
 
-  " Force your ~/.vim/after directory to be last in &rtp always:
-  " let g:vim_addon_manager.rtp_list_hook = 'vam#ForceUsersAfterDirectoriesToBeLast'
+" Jump forward or backward
+imap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'      : '<Tab>'
+smap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'      : '<Tab>'
+imap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
+smap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
 
-  " most used options you may want to use:
-  " let c.log_to_buf = 1
-  " let c.auto_install = 0
-  let &rtp.=(empty(&rtp)?'':',').c.plugin_root_dir.'/vim-addon-manager'
-  if !isdirectory(c.plugin_root_dir.'/vim-addon-manager/autoload')
-    execute '!git clone --depth=1'
-        \       'https://github.com/MarcWeber/vim-addon-manager'
-        \       shellescape(c.plugin_root_dir.'/vim-addon-manager', 1)
-  endif
-
-  " This provides the VAMActivate command, you could be passing plugin names, too
-  call vam#ActivateAddons([], {})
-endfun
-call SetupVAM()
-
-autocmd FileType python VAMActivate jedi-vim vim-flake8 pylint
-" autocmd FileType go VAMActivate github:fatih/vim-go
-VAMActivate github:fatih/vim-go
-autocmd FileType proto VAMActivate github:belltoy/vim-protobuf
-" VAMActivate ctrlp vim-gitgutter commentary repeat surround unimpaired github:vim-scripts/L9 AutoComplPop ack github:majutsushi/tagbar github:tpope/vim-fugitive github:scrooloose/nerdtree github:Xuyuanp/nerdtree-git-plugin
-VAMActivate ctrlp vim-gitgutter commentary repeat surround unimpaired github:vim-scripts/L9 github:roxma/SimpleAutoComplPop ack github:majutsushi/tagbar github:tpope/vim-fugitive github:scrooloose/nerdtree github:Xuyuanp/nerdtree-git-plugin github:sjl/splice.vim github:mileszs/ack.vim github:junegunn/limelight.vim github:vim-syntastic/syntastic github:Raimondi/delimitMate github:w0rp/ale github:sheerun/vim-polyglot github:xolox/vim-notes
+" Select or cut text to use as $TM_SELECTED_TEXT in the next snippet.
+" See https://github.com/hrsh7th/vim-vsnip/pull/50
+nmap        s   <Plug>(vsnip-select-text)
+xmap        s   <Plug>(vsnip-select-text)
+nmap        S   <Plug>(vsnip-cut-text)
+xmap        S   <Plug>(vsnip-cut-text)
 
 filetype plugin indent on
 
@@ -144,4 +193,8 @@ let g:jsonnet_fmt_options = '--string-style d'
 
 autocmd FileType jsonnet set sw=2 et
 autocmd FileType yaml set sw=2 et
-colo wombat256
+
+set gp=git\ grep\ -n
+
+colo wombat256mod
+set path +=**

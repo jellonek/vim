@@ -4,7 +4,8 @@ set guioptions-=t
 set guioptions-=m
 " no ruller
 set go-=r
-set guifont=Consolas\ 13
+" set guifont=Consolas\ 14
+set guifont=Atari\ Classic\ Extrasmooth\ 11
 set rnu " relative numbers
 
 set listchars=tab:¿\ ,trail:·,extends:#,nbsp:·
